@@ -10,7 +10,7 @@ import javax.swing.*;
 public class GUI extends JFrame{
 	
 	/**
-	 * 
+	 * Written by iMarluxia
 	 */
 	private static final long serialVersionUID = 1L;
 	
