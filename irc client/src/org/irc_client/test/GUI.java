@@ -11,6 +11,7 @@ public class GUI extends JFrame{
 	
 	/**
 	 * Written by iMarluxia
+	 * Test for marluxia branch
 	 */
 	private static final long serialVersionUID = 1L;
 	
