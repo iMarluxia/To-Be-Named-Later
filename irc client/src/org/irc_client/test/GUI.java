@@ -92,18 +92,16 @@ public class GUI extends JFrame{
                     System.out.print("Pong'd\n");
                 }
                 else {
-                    // Print the raw line received by the bot.
-                	String OldText, NewText = ircInput.getText();
+                    // Print the raw line received by the bot.;
                 	ircInput.addActionListener(new ActionListener(){
             			public void actionPerformed(ActionEvent e){
-            				OldText = NewText;
-            				NewText = ircInput.getText();
+            				String ircInputText = ircInput.getText();
             				try {
-        						if(!NewText.equals(System.getProperty("line.separator")) || !NewText.equals("")){
-        							writer.write(NewText + "\n");
+        						if(!ircInputText.equals(System.getProperty("line.separator")) || !ircInputText.equals("")){
+        							writer.write(ircInputText + "\n");
             						writer.flush();
-        							ircOutput.append(NewText.trim());
-        							System.out.print(NewText.trim() + "      <WAS A TEST\n");
+        							ircOutput.append(ircInputText.trim());
+        							System.out.print(ircInputText.trim() + "      <WAS A TEST\n");
         						}else{
         							System.out.print("UHUH");
         						}
