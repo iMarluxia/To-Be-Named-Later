@@ -59,7 +59,7 @@ public class GUI extends JFrame{
             System.out.print("Connected\n");
             // Log on to the server.
             writer.write("NICK " + nick + "\r\n");
-            writer.write("USER " + login + " 8 * : Tucker's Bot\r\n");
+            writer.write("USER " + login + " 8 * : TuckerBot\r\n");
             writer.flush( );
             
             // Read lines from the server until it tells us we have connected.
@@ -82,28 +82,33 @@ public class GUI extends JFrame{
             	
                 if (line.toLowerCase( ).startsWith("ping ")) {
                     // We must respond to PINGs to avoid being disconnected.
-                	System.out.print("Trying to PONG\n");
+                	// Use to test for PINGs from the server.
+                	//System.out.print("Trying to PONG\n");
                     writer.write("PONG " + line.substring(5) + "\n");
                     
                     //Un comment to check for ping/pong connection
                     //writer.write("PRIVMSG " + channel + " :I got pinged!\r\n");
                     
                     writer.flush( );
-                    System.out.print("Pong'd\n");
+                    //System.out.print("Pong'd\n");
                 }
                 else {
                     // Print the raw line received by the bot.;
                 	ircInput.addActionListener(new ActionListener(){
             			public void actionPerformed(ActionEvent e){
-            				String ircInputText = ircInput.getText();
+            				String ircInputText = ircInput.getText().trim();
             				try {
-        						if(!ircInputText.equals(System.getProperty("line.separator")) || !ircInputText.equals("")){
-        							writer.write(ircInputText + "\n");
-            						writer.flush();
-        							ircOutput.append(ircInputText.trim());
-        							System.out.print(ircInputText.trim() + "      <WAS A TEST\n");
-        						}else{
-        							System.out.print("UHUH");
+        						if(!ircInputText.equals("")){ //Test if input is present
+        							if(!ircCheckCommand(ircInputText + " ", channel).equals("-1")){ //Check for a valid command, The extra space after ircInputText is for the substring check in ircCheckCommand()
+        								//writer.write("PRIVMSG " + channel + " :" + ircInputText + "\n");
+        								ircInputText = ircCheckCommand(ircInputText, channel);
+            							writer.write(ircInputText + "\r\n"); // Check ircInputText for command
+            							System.out.print(ircInputText);
+                						writer.flush();
+            							ircOutput.append("\n" + ircInputText.trim());
+            							//System.out.print(ircInputText.trim() + "      <WAS A TEST\n"); Test Stuff
+        							}else
+        								ircOutput.append("\nNot a valid command");
         						}
         					} catch (IOException e1) {
         						// TODO Auto-generated catch block
@@ -147,5 +152,19 @@ public class GUI extends JFrame{
 		}
 		new GUI();
 	}
+	
+	String ircCheckCommand(String commandLine, String channel){
+		if(commandLine.startsWith("/")){
+			String command = commandLine.substring(0, commandLine.indexOf(" "));
+	    	String parameters = commandLine.substring(commandLine.indexOf(" "));
+	    	if(command.equals("/join")){
+	    		String joinChannel = parameters.trim();
+	    		System.out.print("Joining " + channel);
+	    		return "JOIN " + joinChannel;
+	    	}else
+	    		return "-1";
+		}else
+			return "PRIVMSG " + channel + " :" + commandLine;
+    	
+    }
 }
-
